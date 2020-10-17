@@ -1,5 +1,6 @@
 import socket
 import json
+import sys	#for exit
 
 # Create a UDP socket at client side
 UDPClientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -40,8 +41,8 @@ variables.client_id = input("->")
 # UDPClientSocket.sendto(bytes(variables.client_id, "utf-8"), serverAddressPort)
 option = request_options()
 
-while option != "3":
-    while option == "1":
+while option == "1" or option == "2":
+    if option == "1":
         variables.client_code = "T"
         print("Enter dest ID as a string: ")
         variables.dest_id = input("-> ")
@@ -53,13 +54,15 @@ while option != "3":
         print("MESSAGE TO SEND: {} To: {} From: {} Text: {}".format(variables.client_code, variables.dest_id,
                                                                     variables.client_id, variables.send_text))
         send_msg(send_data)
-        client_option = request_options()
 
-    while option == "2":
+    elif option == "2":
         variables.client_code = "C"
         print("MESSAGE TO SEND: {} From: {} ".format(variables.client_code, variables.client_id))
         send_data = json.dumps({"code": variables.client_code, "client_id": variables.client_id})
-        client_option = request_options()
 
-if option == "3":
+    option = request_options()
+
+
+else:
     UDPClientSocket.close()
+    sys.exit()
