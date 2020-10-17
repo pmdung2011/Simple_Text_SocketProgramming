@@ -77,4 +77,4 @@ while True:
 
     print(storage)
 
-    UDPServerSocket.close()
+    
