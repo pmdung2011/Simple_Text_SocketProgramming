@@ -9,6 +9,9 @@ buffer_size = 1024
 msg_from_server = "Welcome to UDP server"
 bytes_to_send = str.encode(msg_from_server)
 
+# Create empty dictionary to store messages
+storage = {}
+
 
 class ProcessData:
     client_code = ""
@@ -27,11 +30,11 @@ class ProcessData:
 
 def check_code(received_data, c_code):
     if c_code == "T":
-        storage[received_data.client_IP] = received_data.send_text
+        storage[received_data.dest_id] = received_data.send_text
     else:
-        if received_data.client_IP in storage.keys():
+        if received_data.dest_id in storage.keys():
             result = storage[received_data.client_IP]
-            storage.pop(received_data.client_IP)
+            storage.pop(received_data.dest_id)
             return result
         else:
             result = "No Text"
@@ -45,7 +48,6 @@ UDPServerSocket.bind(UDPServerPort)
 welcome_message = "SERVER IS NOW LISTENING AT UDP SOCKET"
 print(welcome_message)
 
-storage = {}
 
 while True:
     data, client_address = UDPServerSocket.recvfrom(buffer_size*2)
@@ -73,8 +75,10 @@ while True:
         UDPServerSocket.sendto(bytes(warning_msg, "utf-8"), client_address)
     else:
         feedback_data = check_code(processData, client_code)
+        print("Storage: ")
+        print(storage)
         UDPServerSocket.sendto(feedback_data, client_address)
 
-    print(storage)
 
-    
+
+
