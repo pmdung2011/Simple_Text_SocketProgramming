@@ -33,11 +33,11 @@ def request_options():
     return c_option
 
 
-def receiving_data(data, opt, id):
+def receiving_data(data, opt, local_id):
     recv_data, server_add = UDPClientSocket.recvfrom(buffer_size * 2)
     recv_data = json.loads(recv_data.decode())
     if opt == "2":
-        print("TEXT RECEIVED: To: {} From: {} Text: {}".format(id, recv_data["sender"], recv_data["message"]))
+        print("TEXT RECEIVED: To: {} From: {} Text: {}".format(local_id, recv_data["sender"], recv_data["message"]))
     else:
         print("MESSAGE RECEIVED FROM SERVER: {}".format(recv_data["message"]))
 
@@ -47,7 +47,6 @@ variables.client_IP = IPAddr
 
 print("Enter your ID as a string")
 variables.client_id = input("->")
-# UDPClientSocket.sendto(bytes(variables.client_id, "utf-8"), serverAddressPort)
 option = request_options()
 
 while option == "1" or option == "2":
