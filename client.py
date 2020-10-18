@@ -15,14 +15,6 @@ buffer_size = 1024
 UDPClientSocket.connect(serverAddressPort)
 
 
-class ProcessData:
-    client_code = ""
-    client_id = ""
-    dest_id = ""
-    send_text = ""
-    client_IP = ""
-
-
 def send_msg(sending_data):
     UDPClientSocket.sendto(sending_data.encode(), serverAddressPort)
 
