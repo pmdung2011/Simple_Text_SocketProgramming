@@ -40,20 +40,15 @@ def handle_socket(data, client_address, local_storage):
                                                                     process_data.send_text))
         if process_data.dest_id not in local_storage:
             local_storage[process_data.dest_id] = []  # Create a queue to store data with the same key
-        # local_storage[process_data.dest_id].append(process_data.send_text)
         local_storage[process_data.dest_id].append(process_data)
-        # print("Storage: ")
-        # print(local_storage)
         result = json.dumps({"message": "messages stored"})
 
     elif client_code == "C":
         if process_data.client_id in local_storage.keys():
-            # text = "\n".join(local_storage[process_data.client_id])
-            # del local_storage[process_data.client_id]
             obj = local_storage[process_data.client_id].pop(0)  # Pop out relative object
             if obj.send_text is not None:
-                result = json.dumps({"message": obj.send_text, "sender": obj.client_id})
-                print("MESSAGE TO SEND: T To: {} From: {} Text: {}".format(obj.dest_id, obj.client_id, result))
+                result = json.dumps({"message": obj.send_text, "sender": obj.client_id})  # Convert text and id into json
+                print("MESSAGE TO SEND: T To: {} From: {} Text: {}".format(obj.dest_id, obj.client_id, obj.send_text))
             else:
                 result = json.dumps({"message": "No Text", "sender": obj.client_id})
                 print("MESSAGE TO SEND: T To: {} Text: No Text".format(obj.client_id))
@@ -63,16 +58,13 @@ def handle_socket(data, client_address, local_storage):
 
     else:
         result = json.dumps({"message": "Invalid <code> format. "})
-    # print(result)
-    # result = str.encode(result)
     with socket_lock:
         UDPServerSocket.sendto(result.encode(), client_address)
 
 
 while True:
     processing_data, processing_client_address = UDPServerSocket.recvfrom(buffer_size * 2)
-    # print("receiving data from ")
-    # print(processing_client_address)
+
     # Create threads to handle multiple clients
     thread = threading.Thread(target=handle_socket, args=(processing_data, processing_client_address, storage))
     thread.daemon = True
