@@ -5,7 +5,9 @@ class ProcessData:
     send_text = ""
     client_IP = ""
 
-    def __init__(self, data_object):
+    def __init__(self, data_object = None):
+        if data_object is None:
+            return
         # print(data_object)
         self.client_code = data_object["code"]
         self.client_id = data_object["client_id"]
@@ -13,4 +15,3 @@ class ProcessData:
             self.dest_id = data_object["dest_id"]
         if "send_text" in data_object:
             self.send_text = data_object["send_text"]
-
