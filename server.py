@@ -1,7 +1,6 @@
 import socket
 import json
 import threading
-import pickle
 from process_data import ProcessData
 
 # Create Socket options
